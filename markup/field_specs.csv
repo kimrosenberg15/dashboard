@@ -1,84 +1,84 @@
-#,Page,Section,Field,Type,Editable,Airtable Table,Airtable Field,Input Prompt,Constraint,Example,Notes
-1,1,Header,Flock Safety logo,image,No,—,—,—,SVG / brand asset,Flock Safety wordmark,Locked — brand asset baked into template
-2,1,Headline,"Headline vertical phrase (""Flock Safety for [X]"")",text,Yes,Verticals,headline_vertical,"Enter the vertical name as it should appear after ""Flock Safety for"". Title case.",≤ 24 chars,Transit Agencies,"Drives both #2 and #30 (page 2 section header)"
-3,1,Headline,Subheadline tagline,text,Yes,Verticals,subheadline,"3 short punchy phrases separated by periods. Sets the value proposition.",≤ 80 chars,Real Time Awareness. Rapid Response. Safer Transit.,Three-beat rhythm matches brand voice
-4,1,Header,Hero image (cover band),image,Yes,Verticals,hero_image_cover,"Upload a vertical-specific hero photo. Landscape orientation, high contrast, action-oriented.",~1500×950 px JPG/PNG,Bus + crosswalk scene,Right-half of the dark green header band
-5,1,Body,Body paragraph 1 (problem framing),rich text,Yes,Verticals,body_paragraph_1,"Describe the operational challenge this vertical faces. 2–3 sentences, no jargon.",~280 chars,"Transit agencies manage complex, high-traffic environments…",Plain text — no bold needed
-6,1,Body,Body paragraph 2 (Flock solution),rich text,Yes,Verticals,body_paragraph_2,"Describe how Flock helps. Use **double asterisks** to bold the key value phrase.",~280 chars,"Flock brings these environments together, **providing teams situational awareness**…",Markdown bold supported
-7,1,Advantage,"""The Flock Advantage"" section header",text,No,—,—,—,Fixed string,The Flock Advantage,Locked — same on every piece
-8,1,Advantage,Advantage 1 — title,text,Yes,Verticals,advantage_1_title,"One-line headline for the first ""Flock Advantage"" pillar.",≤ 60 chars,The largest public-private safety network,
-9,1,Advantage,Advantage 1 — description,text,Yes,Verticals,advantage_1_desc,"2-line supporting copy for advantage 1.",≤ 160 chars,Our intelligent platform unites communities…,
-10,1,Advantage,Advantage 2 — title,text,Yes,Verticals,advantage_2_title,One-line headline for the second pillar.,≤ 60 chars,Technology that's always up-to-date.,
-11,1,Advantage,Advantage 2 — description,text,Yes,Verticals,advantage_2_desc,2-line supporting copy for advantage 2.,≤ 160 chars,Flock's platform ensures you get automatic updates…,
-12,1,Advantage,Advantage 3 — title,text,Yes,Verticals,advantage_3_title,One-line headline for the third pillar.,≤ 60 chars,Privacy-first. Always Accountable.,
-13,1,Advantage,Advantage 3 — description,text,Yes,Verticals,advantage_3_desc,2-line supporting copy for advantage 3.,≤ 160 chars,We built Flock with privacy at the core…,
-14,1,Advantage,Advantage 4 — title,text,Yes,Verticals,advantage_4_title,One-line headline for the fourth pillar.,≤ 60 chars,"Everything connected, no silos.",
-15,1,Advantage,Advantage 4 — description,text,Yes,Verticals,advantage_4_desc,2-line supporting copy for advantage 4.,≤ 160 chars,Flock's open ecosystem unites all your safety tools…,
-16,1,Proof Panel,"""Proven at Scale"" panel header",text,No,—,—,—,Fixed string,Proven at Scale,Locked — green panel header
-17,1,Proof Panel,Stat bullet 1,text,Yes,Verticals,stat_1,Lead stat — outcome metric. Use bold-clean format with %.,≤ 80 chars,20% of reported crime in the U.S. solved using Flock,
-18,1,Proof Panel,Stat bullet 2,text,Yes,Verticals,stat_2,Customer scale stat. Lead with the number.,≤ 80 chars,"5,000+ agencies using Flock across 49 states",
-19,1,Proof Panel,Stat bullet 3,text,Yes,Verticals,stat_3,Mission/impact stat.,≤ 80 chars,"2,000+ missing people reunited with families",
-20,1,Proof Panel,Stat bullet 4,text,Yes,Verticals,stat_4,Adoption ratio stat.,≤ 80 chars,1 in 3 law enforcement officers uses Flock,
-21,1,Proof Panel,Stat bullet 5 (local proof),text,Yes,Collateral,local_stat,"Local/region-specific proof point. Will vary per piece — typically sensor density in target metro.",≤ 80 chars,"23,000+ Flock sensors within 500 miles of New York City",Distinct from stats 1–4 because it's recipient-specific
-22,1,Proof Panel,Sensor-coverage diagram,image,Yes,Collateral,sensor_diagram,Upload a sensor density map for the target metro/region.,~700×500 px PNG with transparent bg,NYC sensor map,Bottom of green panel
-23,1,Footer,Rep — name,text,Yes,Reps,name,Sales rep's full name as it should appear in the footer.,≤ 40 chars,Joe Rosenberg,Same on all 3 pages
-24,1,Footer,Rep — title / region,text,Yes,Reps,title_region,"Rep's title and region/territory, comma-separated.",≤ 60 chars,"Major Account Lead, New York",
-25,1,Footer,Rep — phone,text,Yes,Reps,phone,"Phone number in (###) ###-#### format.",14 chars,(914) 203-3281,
-26,1,Footer,Rep — email,text,Yes,Reps,email,Work email address.,Valid email,joe.rosenberg@flocksafety.com,
-27,1,Footer,QR code,image/URL,Yes,Collateral,qr_target_url,"Destination URL for the QR code (rep landing page, campaign tracker, calendar link). QR is auto-generated.",Valid URL,https://flocksafety.com/r/joe-rosenberg,Auto-generated from URL → image
-28,2,Header,Top hero image,image,Yes,Verticals,hero_image_products,"Wide hero photo for products page. Different from #4 — show real-world deployment.",~1800×600 px,Transit station / commuters,Full-width banner
-29,2,Intro,Intro paragraph,rich text,Yes,Verticals,products_intro,"One short paragraph framing installation/integration. 1–2 sentences.",≤ 220 chars,"Flock Safety installs quickly and connects directly with your existing systems…",
-30,2,Header,"Section header — ""Flock Products for [Vertical]""",text,No,—,—,—,Auto from #2,Flock Products for Transit Agencies,Locked template; vertical name mirrors #2
-31,2,Product 1,Product 1 — icon image,image,Yes,Products,icon,Round product icon — circular crop on photo.,~400×400 px circular,LPR camera close-up,
-32,2,Product 1,Product 1 — name,text,Yes,Products,name,Product name in ALL CAPS. Marketing-approved naming.,≤ 30 chars,LPR CAMERAS,
-33,2,Product 1,Product 1 — description,text,Yes,Products,description,2–3 line product description focused on use case for this vertical.,≤ 180 chars,"Solar-powered, infrastructure-free cameras capture vehicle entry and exit…",
-34,2,Product 2,Product 2 — icon image,image,Yes,Products,icon,Round product icon.,~400×400 px,Audio detection unit,
-35,2,Product 2,Product 2 — name,text,Yes,Products,name,Product name in ALL CAPS.,≤ 30 chars,AUDIO DETECTION,
-36,2,Product 2,Product 2 — description,text,Yes,Products,description,2–3 line description.,≤ 180 chars,"Detect gunshots, vehicle crashes, and calls for help…",
-37,2,Product 3,Product 3 — icon image,image,Yes,Products,icon,Round product icon.,~400×400 px,PTZ live camera,
-38,2,Product 3,Product 3 — name,text,Yes,Products,name,Product name in ALL CAPS.,≤ 30 chars,LIVE VIDEO CAMERAS,
-39,2,Product 3,Product 3 — description,text,Yes,Products,description,2–3 line description.,≤ 180 chars,AI-enabled PTZ cameras monitor activity…,
-40,2,Product 4,Product 4 — icon image,image,Yes,Products,icon,Round product icon.,~400×400 px,Mobile security trailer,
-41,2,Product 4,Product 4 — name,text,Yes,Products,name,Product name in ALL CAPS.,≤ 30 chars,MOBILE SECURITY TRAILERS,
-42,2,Product 4,Product 4 — description,text,Yes,Products,description,2–3 line description.,≤ 180 chars,High-visibility deterrence with 24/7 video coverage…,
-43,2,Product 5,Product 5 — icon image,image,Yes,Products,icon,Round product icon.,~400×400 px,DFR drone in flight,
-44,2,Product 5,Product 5 — name,text,Yes,Products,name,Product name in ALL CAPS.,≤ 30 chars,FLOCK DRONE AS FIRST RESPONDER (DFR),
-45,2,Product 5,Product 5 — description,text,Yes,Products,description,2–3 line description.,≤ 180 chars,A DFR system enables rapid launch from toll plazas…,
-46,2,Product 6,Product 6 — icon image,image,Yes,Products,icon,Round product icon.,~400×400 px,Video integration screen,
-47,2,Product 6,Product 6 — name,text,Yes,Products,name,Product name in ALL CAPS.,≤ 30 chars,VIDEO INTEGRATION,
-48,2,Product 6,Product 6 — description,text,Yes,Products,description,2–3 line description.,≤ 180 chars,Search live video with plain-English queries…,
-49,2,Product 7,Product 7 — icon image,image,Yes,Products,icon,Round product icon.,~400×400 px,Services team / consultation,
-50,2,Product 7,Product 7 — name,text,Yes,Products,name,Product name in ALL CAPS.,≤ 30 chars,PROFESSIONAL SERVICES,
-51,2,Product 7,Product 7 — description,text,Yes,Products,description,2–3 line description.,≤ 180 chars,"Dedicated consulting and account support for strategic planning…",
-52,2,Product 8,Product 8 — icon image,image,Yes,Products,icon,"Round product icon (or chart graphic for analytics product).",~400×400 px,Analytics bar chart,
-53,2,Product 8,Product 8 — name,text,Yes,Products,name,Product name in ALL CAPS.,≤ 30 chars,ANALYTICS AND REPORTING,
-54,2,Product 8,Product 8 — description,text,Yes,Products,description,2–3 line description.,≤ 180 chars,Surface movement patterns and incident trends…,
-55,2,Compliance,Compliance line,text,No,—,—,—,Fixed string,"Flock is proudly based in Atlanta, Georgia. Our products meet NDAA Compliance requirements.",Locked — compliance/legal language
-56,2,Footer,Rep info (repeats 23–26),text,No,—,Reps→all,—,Auto-driven by Rep record,—,Mirrors page 1 footer
-57,2,Footer,QR code (repeats #27),image,No,—,Collateral→qr_target_url,—,Auto-driven by URL,—,Same QR as page 1
-58,3,Header,Section title,text,Yes,Verticals,feature_table_title,"Section title for the value-mapping table. ""Flexible Technology to Match Your [Vertical Need]""",≤ 60 chars,Flexible Technology to Match Your Goals,
-59,3,Table,"Table header row (""FEATURE"" / ""WHY IT MATTERS"")",text,No,—,—,—,Fixed strings,FEATURE / WHY IT MATTERS,Locked
-60,3,Table,Row 1 — feature,text,Yes,FeatureRows,feature,Short benefit label.,≤ 40 chars,Resolve Cases Faster,
-61,3,Table,Row 1 — why-it-matters,text,Yes,FeatureRows,why,One-sentence explanation tied to this vertical.,≤ 180 chars,Use objective data to strengthen investigations…,
-62,3,Table,Row 2 — feature,text,Yes,FeatureRows,feature,Short benefit label.,≤ 40 chars,Protect Fare and Toll Revenue,
-63,3,Table,Row 2 — why-it-matters,text,Yes,FeatureRows,why,One-sentence explanation.,≤ 180 chars,"Identify fake, swapped, or ghost plates tied to toll evasion…",
-64,3,Table,Row 3 — feature,text,Yes,FeatureRows,feature,Short benefit label.,≤ 40 chars,Instant Aerial Awareness,
-65,3,Table,Row 3 — why-it-matters,text,Yes,FeatureRows,why,One-sentence explanation.,≤ 180 chars,Deploy drones in seconds to deliver live aerial views…,
-66,3,Table,Row 4 — feature,text,Yes,FeatureRows,feature,Short benefit label.,≤ 40 chars,Real-Time Incident Detection,
-67,3,Table,Row 4 — why-it-matters,text,Yes,FeatureRows,why,One-sentence explanation.,≤ 180 chars,"Detect shootings, crashes, and distress through audio alerts…",
-68,3,Table,Row 5 — feature,text,Yes,FeatureRows,feature,Short benefit label.,≤ 40 chars,Actionable AI Insights,
-69,3,Table,Row 5 — why-it-matters,text,Yes,FeatureRows,why,One-sentence explanation.,≤ 180 chars,Apply AI-powered search and alerts across existing camera systems…,
-70,3,Table,Row 6 — feature,text,Yes,FeatureRows,feature,Short benefit label.,≤ 40 chars,Work with Existing Systems,
-71,3,Table,Row 6 — why-it-matters,text,Yes,FeatureRows,why,One-sentence explanation.,≤ 180 chars,"Integrate with CAD/RMS, VMS, and evidence platforms…",
-72,3,Table,Row 7 — feature,text,Yes,FeatureRows,feature,Short benefit label.,≤ 40 chars,Interagency Coordination,
-73,3,Table,Row 7 — why-it-matters,text,Yes,FeatureRows,why,One-sentence explanation.,≤ 180 chars,"Opt to share with authorized state and local law enforcement…",
-74,3,Table,Row 8 — feature,text,Yes,FeatureRows,feature,Short benefit label.,≤ 40 chars,"Rapid, Flexible Deployment",
-75,3,Table,Row 8 — why-it-matters,text,Yes,FeatureRows,why,One-sentence explanation.,≤ 180 chars,Deploy solar-powered infrastructure-free systems quickly…,
-76,3,CTA,CTA tagline,text,Yes,Verticals,cta_tagline,"Closing tagline. Same 3-beat rhythm as subheadline. Mirrors brand cadence.",≤ 50 chars,Smarter Tools. Safer Transit.,
-77,3,CTA,CTA body,rich text,Yes,Verticals,cta_body,"2–3 sentence closing. Use **bold** to emphasize the key outcomes phrase.",≤ 280 chars,"Flock helps transit leaders **improve safety, strengthen response**…",Markdown bold supported
-78,3,Testimonial,Testimonial photo,image,Yes,Testimonials,photo,"Atmospheric photo from the customer's environment, not a headshot.",~700×500 px,Police station at dusk,Sits inside dark green CTA block
-79,3,Testimonial,Attribution — name,text,Yes,Testimonials,name,Speaker's name with title prefix if used (Chief / Director).,≤ 40 chars,Chief Stuart VanHoozer,
-80,3,Testimonial,Attribution — title / dept,text,Yes,Testimonials,title,"Speaker's role and organization. Use line break if needed.",≤ 80 chars,"Chief of Police, Cobb County Police Department (GA)",
-81,3,Testimonial,Pull quote,text,Yes,Testimonials,quote,"Verbatim customer quote in straight double quotes. Keep tight — 2–3 sentences max.",≤ 320 chars,"""Flock Safety is the single best tool I have seen in 30 years…""",
-82,3,Footer,Rep info (repeats 23–26),text,No,—,Reps→all,—,Auto-driven by Rep record,—,Mirrors page 1 footer
-83,3,Footer,QR code (repeats #27),image,No,—,Collateral→qr_target_url,—,Auto-driven by URL,—,Same QR as page 1
+#,Page,Section,Field,Type,Mode,Airtable Table,Airtable Field,Input Prompt,Constraint,Example,Notes
+1,1,Header,Flock Safety logo,image,Locked,—,—,—,SVG / brand asset,Flock Safety wordmark,Locked — brand asset baked into template
+2,1,Headline,"Headline vertical phrase (""Flock Safety for [X]"")",text,Default,Verticals,headline_vertical,"Enter the vertical name as it should appear after ""Flock Safety for"". Title case.",≤ 24 chars,Transit Agencies,Drives both #2 and #30 (page 2 section header)
+3,1,Headline,Subheadline tagline,text,Default,Verticals,subheadline,3 short punchy phrases separated by periods. Sets the value proposition.,≤ 80 chars,Real Time Awareness. Rapid Response. Safer Transit.,Three-beat rhythm matches brand voice
+4,1,Header,Hero image (cover band),image,Default,Verticals,hero_image_cover,"Upload a vertical-specific hero photo. Landscape orientation, high contrast, action-oriented.",~1500×950 px JPG/PNG,Bus + crosswalk scene,Right-half of the dark green header band
+5,1,Body,Body paragraph 1 (problem framing),rich text,Default,Verticals,body_paragraph_1,"Describe the operational challenge this vertical faces. 2–3 sentences, no jargon.",~280 chars,"Transit agencies manage complex, high-traffic environments…",Plain text — no bold needed
+6,1,Body,Body paragraph 2 (Flock solution),rich text,Default,Verticals,body_paragraph_2,Describe how Flock helps. Use **double asterisks** to bold the key value phrase.,~280 chars,"Flock brings these environments together, **providing teams situational awareness**…",Markdown bold supported
+7,1,Advantage,"""The Flock Advantage"" section header",text,Locked,—,—,—,Fixed string,The Flock Advantage,Locked — same on every piece
+8,1,Advantage,Advantage 1 — title,text,Default,Verticals,advantage_1_title,"One-line headline for the first ""Flock Advantage"" pillar.",≤ 60 chars,The largest public-private safety network,
+9,1,Advantage,Advantage 1 — description,text,Default,Verticals,advantage_1_desc,2-line supporting copy for advantage 1.,≤ 160 chars,Our intelligent platform unites communities…,
+10,1,Advantage,Advantage 2 — title,text,Default,Verticals,advantage_2_title,One-line headline for the second pillar.,≤ 60 chars,Technology that's always up-to-date.,
+11,1,Advantage,Advantage 2 — description,text,Default,Verticals,advantage_2_desc,2-line supporting copy for advantage 2.,≤ 160 chars,Flock's platform ensures you get automatic updates…,
+12,1,Advantage,Advantage 3 — title,text,Default,Verticals,advantage_3_title,One-line headline for the third pillar.,≤ 60 chars,Privacy-first. Always Accountable.,
+13,1,Advantage,Advantage 3 — description,text,Default,Verticals,advantage_3_desc,2-line supporting copy for advantage 3.,≤ 160 chars,We built Flock with privacy at the core…,
+14,1,Advantage,Advantage 4 — title,text,Default,Verticals,advantage_4_title,One-line headline for the fourth pillar.,≤ 60 chars,"Everything connected, no silos.",
+15,1,Advantage,Advantage 4 — description,text,Default,Verticals,advantage_4_desc,2-line supporting copy for advantage 4.,≤ 160 chars,Flock's open ecosystem unites all your safety tools…,
+16,1,Proof Panel,"""Proven at Scale"" panel header",text,Locked,—,—,—,Fixed string,Proven at Scale,Locked — green panel header
+17,1,Proof Panel,Stat bullet 1,text,Default,Verticals,stat_1,Lead stat — outcome metric. Use bold-clean format with %.,≤ 80 chars,20% of reported crime in the U.S. solved using Flock,
+18,1,Proof Panel,Stat bullet 2,text,Default,Verticals,stat_2,Customer scale stat. Lead with the number.,≤ 80 chars,"5,000+ agencies using Flock across 49 states",
+19,1,Proof Panel,Stat bullet 3,text,Default,Verticals,stat_3,Mission/impact stat.,≤ 80 chars,"2,000+ missing people reunited with families",
+20,1,Proof Panel,Stat bullet 4,text,Default,Verticals,stat_4,Adoption ratio stat.,≤ 80 chars,1 in 3 law enforcement officers uses Flock,
+21,1,Proof Panel,Stat bullet 5 (local proof),text,Per-piece,Collateral,local_stat,Local/region-specific proof point. Will vary per piece — typically sensor density in target metro.,≤ 80 chars,"23,000+ Flock sensors within 500 miles of New York City",Distinct from stats 1–4 because it's recipient-specific
+22,1,Proof Panel,Sensor-coverage diagram,image,Per-piece,Collateral,sensor_diagram,Upload a sensor density map for the target metro/region.,~700×500 px PNG with transparent bg,NYC sensor map,Bottom of green panel
+23,1,Footer,Rep — name,text,Per-piece,Reps,name,Sales rep's full name as it should appear in the footer.,≤ 40 chars,Joe Rosenberg,Same on all 3 pages
+24,1,Footer,Rep — title / region,text,Per-piece,Reps,title_region,"Rep's title and region/territory, comma-separated.",≤ 60 chars,"Major Account Lead, New York",
+25,1,Footer,Rep — phone,text,Per-piece,Reps,phone,Phone number in (###) ###-#### format.,14 chars,(914) 203-3281,
+26,1,Footer,Rep — email,text,Per-piece,Reps,email,Work email address.,Valid email,joe.rosenberg@flocksafety.com,
+27,1,Footer,QR code,image/URL,Per-piece,Collateral,qr_target_url,"Destination URL for the QR code (rep landing page, campaign tracker, calendar link). QR is auto-generated.",Valid URL,https://flocksafety.com/r/joe-rosenberg,Auto-generated from URL → image
+28,2,Header,Top hero image,image,Default,Verticals,hero_image_products,Wide hero photo for products page. Different from #4 — show real-world deployment.,~1800×600 px,Transit station / commuters,Full-width banner
+29,2,Intro,Intro paragraph,rich text,Default,Verticals,products_intro,One short paragraph framing installation/integration. 1–2 sentences.,≤ 220 chars,Flock Safety installs quickly and connects directly with your existing systems…,
+30,2,Header,"Section header — ""Flock Products for [Vertical]""",text,Locked,—,—,—,Auto from #2,Flock Products for Transit Agencies,Locked template; vertical name mirrors #2
+31,2,Product 1,Product 1 — icon image,image,Default,Products,icon,Round product icon — circular crop on photo.,~400×400 px circular,LPR camera close-up,
+32,2,Product 1,Product 1 — name,text,Default,Products,name,Product name in ALL CAPS. Marketing-approved naming.,≤ 30 chars,LPR CAMERAS,
+33,2,Product 1,Product 1 — description,text,Default,Products,description,2–3 line product description focused on use case for this vertical.,≤ 180 chars,"Solar-powered, infrastructure-free cameras capture vehicle entry and exit…",
+34,2,Product 2,Product 2 — icon image,image,Default,Products,icon,Round product icon.,~400×400 px,Audio detection unit,
+35,2,Product 2,Product 2 — name,text,Default,Products,name,Product name in ALL CAPS.,≤ 30 chars,AUDIO DETECTION,
+36,2,Product 2,Product 2 — description,text,Default,Products,description,2–3 line description.,≤ 180 chars,"Detect gunshots, vehicle crashes, and calls for help…",
+37,2,Product 3,Product 3 — icon image,image,Default,Products,icon,Round product icon.,~400×400 px,PTZ live camera,
+38,2,Product 3,Product 3 — name,text,Default,Products,name,Product name in ALL CAPS.,≤ 30 chars,LIVE VIDEO CAMERAS,
+39,2,Product 3,Product 3 — description,text,Default,Products,description,2–3 line description.,≤ 180 chars,AI-enabled PTZ cameras monitor activity…,
+40,2,Product 4,Product 4 — icon image,image,Default,Products,icon,Round product icon.,~400×400 px,Mobile security trailer,
+41,2,Product 4,Product 4 — name,text,Default,Products,name,Product name in ALL CAPS.,≤ 30 chars,MOBILE SECURITY TRAILERS,
+42,2,Product 4,Product 4 — description,text,Default,Products,description,2–3 line description.,≤ 180 chars,High-visibility deterrence with 24/7 video coverage…,
+43,2,Product 5,Product 5 — icon image,image,Default,Products,icon,Round product icon.,~400×400 px,DFR drone in flight,
+44,2,Product 5,Product 5 — name,text,Default,Products,name,Product name in ALL CAPS.,≤ 30 chars,FLOCK DRONE AS FIRST RESPONDER (DFR),
+45,2,Product 5,Product 5 — description,text,Default,Products,description,2–3 line description.,≤ 180 chars,A DFR system enables rapid launch from toll plazas…,
+46,2,Product 6,Product 6 — icon image,image,Default,Products,icon,Round product icon.,~400×400 px,Video integration screen,
+47,2,Product 6,Product 6 — name,text,Default,Products,name,Product name in ALL CAPS.,≤ 30 chars,VIDEO INTEGRATION,
+48,2,Product 6,Product 6 — description,text,Default,Products,description,2–3 line description.,≤ 180 chars,Search live video with plain-English queries…,
+49,2,Product 7,Product 7 — icon image,image,Default,Products,icon,Round product icon.,~400×400 px,Services team / consultation,
+50,2,Product 7,Product 7 — name,text,Default,Products,name,Product name in ALL CAPS.,≤ 30 chars,PROFESSIONAL SERVICES,
+51,2,Product 7,Product 7 — description,text,Default,Products,description,2–3 line description.,≤ 180 chars,Dedicated consulting and account support for strategic planning…,
+52,2,Product 8,Product 8 — icon image,image,Default,Products,icon,Round product icon (or chart graphic for analytics product).,~400×400 px,Analytics bar chart,
+53,2,Product 8,Product 8 — name,text,Default,Products,name,Product name in ALL CAPS.,≤ 30 chars,ANALYTICS AND REPORTING,
+54,2,Product 8,Product 8 — description,text,Default,Products,description,2–3 line description.,≤ 180 chars,Surface movement patterns and incident trends…,
+55,2,Compliance,Compliance line,text,Locked,—,—,—,Fixed string,"Flock is proudly based in Atlanta, Georgia. Our products meet NDAA Compliance requirements.",Locked — compliance/legal language
+56,2,Footer,Rep info (repeats 23–26),text,Per-piece,—,Reps→all,—,Auto-driven by Rep record,—,Mirrors page 1 footer
+57,2,Footer,QR code (repeats #27),image,Per-piece,—,Collateral→qr_target_url,—,Auto-driven by URL,—,Same QR as page 1
+58,3,Header,Section title,text,Default,Verticals,feature_table_title,"Section title for the value-mapping table. ""Flexible Technology to Match Your [Vertical Need]""",≤ 60 chars,Flexible Technology to Match Your Goals,
+59,3,Table,"Table header row (""FEATURE"" / ""WHY IT MATTERS"")",text,Locked,—,—,—,Fixed strings,FEATURE / WHY IT MATTERS,Locked
+60,3,Table,Row 1 — feature,text,Default,FeatureRows,feature,Short benefit label.,≤ 40 chars,Resolve Cases Faster,
+61,3,Table,Row 1 — why-it-matters,text,Default,FeatureRows,why,One-sentence explanation tied to this vertical.,≤ 180 chars,Use objective data to strengthen investigations…,
+62,3,Table,Row 2 — feature,text,Default,FeatureRows,feature,Short benefit label.,≤ 40 chars,Protect Fare and Toll Revenue,
+63,3,Table,Row 2 — why-it-matters,text,Default,FeatureRows,why,One-sentence explanation.,≤ 180 chars,"Identify fake, swapped, or ghost plates tied to toll evasion…",
+64,3,Table,Row 3 — feature,text,Default,FeatureRows,feature,Short benefit label.,≤ 40 chars,Instant Aerial Awareness,
+65,3,Table,Row 3 — why-it-matters,text,Default,FeatureRows,why,One-sentence explanation.,≤ 180 chars,Deploy drones in seconds to deliver live aerial views…,
+66,3,Table,Row 4 — feature,text,Default,FeatureRows,feature,Short benefit label.,≤ 40 chars,Real-Time Incident Detection,
+67,3,Table,Row 4 — why-it-matters,text,Default,FeatureRows,why,One-sentence explanation.,≤ 180 chars,"Detect shootings, crashes, and distress through audio alerts…",
+68,3,Table,Row 5 — feature,text,Default,FeatureRows,feature,Short benefit label.,≤ 40 chars,Actionable AI Insights,
+69,3,Table,Row 5 — why-it-matters,text,Default,FeatureRows,why,One-sentence explanation.,≤ 180 chars,Apply AI-powered search and alerts across existing camera systems…,
+70,3,Table,Row 6 — feature,text,Default,FeatureRows,feature,Short benefit label.,≤ 40 chars,Work with Existing Systems,
+71,3,Table,Row 6 — why-it-matters,text,Default,FeatureRows,why,One-sentence explanation.,≤ 180 chars,"Integrate with CAD/RMS, VMS, and evidence platforms…",
+72,3,Table,Row 7 — feature,text,Default,FeatureRows,feature,Short benefit label.,≤ 40 chars,Interagency Coordination,
+73,3,Table,Row 7 — why-it-matters,text,Default,FeatureRows,why,One-sentence explanation.,≤ 180 chars,Opt to share with authorized state and local law enforcement…,
+74,3,Table,Row 8 — feature,text,Default,FeatureRows,feature,Short benefit label.,≤ 40 chars,"Rapid, Flexible Deployment",
+75,3,Table,Row 8 — why-it-matters,text,Default,FeatureRows,why,One-sentence explanation.,≤ 180 chars,Deploy solar-powered infrastructure-free systems quickly…,
+76,3,CTA,CTA tagline,text,Default,Verticals,cta_tagline,Closing tagline. Same 3-beat rhythm as subheadline. Mirrors brand cadence.,≤ 50 chars,Smarter Tools. Safer Transit.,
+77,3,CTA,CTA body,rich text,Default,Verticals,cta_body,2–3 sentence closing. Use **bold** to emphasize the key outcomes phrase.,≤ 280 chars,"Flock helps transit leaders **improve safety, strengthen response**…",Markdown bold supported
+78,3,Testimonial,Testimonial photo,image,Default,Testimonials,photo,"Atmospheric photo from the customer's environment, not a headshot.",~700×500 px,Police station at dusk,Sits inside dark green CTA block
+79,3,Testimonial,Attribution — name,text,Default,Testimonials,name,Speaker's name with title prefix if used (Chief / Director).,≤ 40 chars,Chief Stuart VanHoozer,
+80,3,Testimonial,Attribution — title / dept,text,Default,Testimonials,title,Speaker's role and organization. Use line break if needed.,≤ 80 chars,"Chief of Police, Cobb County Police Department (GA)",
+81,3,Testimonial,Pull quote,text,Default,Testimonials,quote,Verbatim customer quote in straight double quotes. Keep tight — 2–3 sentences max.,≤ 320 chars,"""Flock Safety is the single best tool I have seen in 30 years…""",
+82,3,Footer,Rep info (repeats 23–26),text,Per-piece,—,Reps→all,—,Auto-driven by Rep record,—,Mirrors page 1 footer
+83,3,Footer,QR code (repeats #27),image,Per-piece,—,Collateral→qr_target_url,—,Auto-driven by URL,—,Same QR as page 1
