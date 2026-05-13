@@ -1,121 +1,127 @@
 # RULES — Operating Rules for AI Tools on the Flock Project
 
-Any AI tool / chat working on this project must follow these rules. Pasted into PROMPT.md context on every session.
+Any AI tool / chat working on this project must follow these rules.
 
 ---
 
-## A. Reading order (always)
+## ⚡ Top rules (never break these)
 
-1. Read `PROMPT.md` first
-2. Then `context/STRATEGY.md`, `context/DECISIONS.md`, `context/BRAND.md`, `context/PEOPLE.md`, `context/GLOSSARY.md`
-3. Then `context/ARCHITECTURE.md` if doing technical work
-4. Then `markup/field_specs.csv` if discussing fields
-5. Only respond after reading the above
+### Rule 0 — Do everything you can yourself
+Never ask the user to copy, paste, log in, click, or perform any task you can do via tools (git, GitHub MCP, file edits, web fetches, code execution). Drive every step to completion. Ask the user only when you genuinely need a decision or external information that's unavailable to you.
 
-## B. Communication style
+### Rule 1 — Scale-ready, not over-engineered
+Build with the assumption this template system will extend to other marketing and sales collateral. But ship the immediate Flock pitch card fast. Push back any time we start:
+- Adding abstractions for hypothetical future use cases
+- Building "platform" features before the first artifact is shipped
+- Choosing complex tooling when a simple file solves it
+- Designing schemas richer than current needs
 
-- Kim is non-technical. Plain language always. No jargon without defining it.
-- Concise by default. Short paragraphs, bullet lists, short sentences.
-- No emojis unless explicitly requested.
+Concrete heuristic: if a feature isn't needed for the Flock pitch card v1, it waits.
+
+### Rule 2 — Concise, comparative, recommended
+- Always lead with the answer or recommendation
+- For any comparison, use a **table**, not prose paragraphs
+- Always recommend the best **long-term option** (call it out explicitly)
+- No long exposition. No thinking-out-loud. No filler paragraphs.
+- One-sentence wrap-up at the end of non-trivial responses
+
+User is non-technical. Define jargon once or avoid it.
+
+---
+
+## A. Reading order (every session)
+
+1. `PROMPT.md`
+2. `context/STRATEGY.md`, `DECISIONS.md`, `BRAND.md`, `PEOPLE.md`, `GLOSSARY.md`
+3. `context/ARCHITECTURE.md` if doing technical work
+4. `markup/field_specs.csv` if discussing fields
+
+## B. Communication
+
+- Plain language. No emojis unless requested.
+- Short paragraphs. Bullets. Tables.
 - Don't restate the question.
-- Don't pad with caveats. If you're confident, say it.
-- One-sentence summary at the end of any non-trivial response.
+- Don't pad with caveats.
 
 ## C. Decision-making
 
-- When uncertain between two reasonable options, **propose one with rationale** — don't dump a comparison matrix on Kim.
-- Use the AskUserQuestion tool only for genuinely ambiguous design decisions, not for things you can decide and let Kim correct.
-- Match your action to what was asked. Don't expand scope.
+- Propose one option with rationale; don't dump matrices unless asked for a comparison
+- When asked to compare: table, recommendation, done
+- Use AskUserQuestion only for genuine ambiguity
 
-## D. What's in scope for the AI
+## D. In scope
 
-- Visual design (HTML/CSS template, brand styling, image handling)
-- PDF rendering pipeline (Puppeteer or equivalent)
-- Brand kit assets (logo, colors, fonts as files)
+- HTML/CSS template, brand styling, image handling
+- PDF rendering (Puppeteer)
+- Brand kit files
 - Spec maintenance (`markup/field_specs.csv`)
-- Context maintenance (`context/` files, end-of-session updates)
-- Repo operations (commits, pushes, PRs, file management)
+- Context maintenance (`context/`)
+- Git, GitHub, file ops, code execution
 
-## E. What's NEVER in scope
+## E. Out of scope
 
-- Writing the per-account text content for the customizable fields (Joe's pipeline does this)
-- Inventing brand colors, fonts, or photography style without explicit user direction
-- Reproducing verbatim copy from the reference PDF beyond brief illustrative snippets (IP/copyright)
-- Making destructive git ops without confirmation (force push, hard reset, branch deletion)
-- Creating new GitHub repos unless asked
-- Touching files outside `kimrosenberg15/dashboard` (renamed to Flock-Current)
+- Writing per-account text content (Joe's pipeline does this)
+- Inventing brand colors / fonts / photography style without user direction
+- Reproducing verbatim copy from the reference PDF beyond brief illustrative snippets (IP)
+- Destructive git ops without confirmation
+- Touching files outside this repo
 
 ## F. End-of-session ritual (REQUIRED)
 
-At the end of any meaningful chat, before user signs off, the AI must:
-1. Write a 1-line session summary
-2. Propose an addition to `context/DECISIONS.md` (date-stamped)
-3. Note any updates to other context files (BRAND, STRATEGY, GLOSSARY, etc.)
-4. Note any new entries for `context/OPEN_QUESTIONS.md`
-5. Ask user to approve → commit
+At the end of every meaningful chat:
+1. 1-line session summary
+2. Propose addition to `context/DECISIONS.md`
+3. Note updates to BRAND / STRATEGY / GLOSSARY if relevant
+4. Add entries to `context/OPEN_QUESTIONS.md` if any
+5. Commit + push
 
-This is non-optional. Without it, context rots.
+Non-optional.
 
 ## G. File conventions
 
-- All context files are markdown (`.md`)
-- All file names use lowercase-with-hyphens for assets, UPPERCASE for context/root docs
-- Decisions are append-only — never delete, only add
-- Dates use ISO format: `YYYY-MM-DD`
-- Commits should reference the relevant context file when applicable
+- Markdown for context files
+- Lowercase-hyphens for assets; UPPERCASE for root docs
+- Decisions append-only, never delete
+- Dates in `YYYY-MM-DD`
+- Reference relevant context file in commit messages
 
-## H. Visual / design rules
+## H. Visual / design
 
-- Pixel-match the reference PDF unless explicitly told otherwise
-- Use brand colors from `brand/brand.css` — never invent hex codes
-- All images load from `brand/assets/` or per-piece URLs — never inline base64
-- Fonts must be licensed and stored in `brand/assets/fonts/` or via a web font with documented terms
-- All text must support 25% length variance without breaking layout (some accounts will have longer/shorter text)
+- Pixel-match reference PDF unless told otherwise
+- Brand colors from `brand/brand.css` only — never invent hex
+- Images from `brand/assets/` or per-piece URLs — never inline base64
+- Fonts licensed and in `brand/assets/fonts/` or a documented web font
+- Template must absorb 25% text-length variance without breaking
 
-## I. Data rules
+## I. Data
 
-- The 83-field spec in `markup/field_specs.csv` is canonical
-- All 83 rows always stay visible in any view of the spec
-- Three-state Mode (Locked/Default/Per-piece) is the source of truth
-- Mode counts: 6 Locked, 66 Default, 11 Per-piece — flag if this changes
-- One row of input data = one PDF. No relational tables.
+- `markup/field_specs.csv` is canonical
+- All 83 rows always visible
+- Mode counts: 6 Locked, 66 Default, 11 Per-piece — flag any change
+- One input row = one PDF. Flat model.
 
-## J. Code rules
+## J. Code
 
-- HTML/CSS template uses semantic HTML + CSS custom properties for theming
-- Rendering via Puppeteer (Chromium headless) — no proprietary tools
-- All scripts must be runnable from a fresh clone with documented dependencies
-- No hardcoded secrets in code — use `.env` (and `.env.example` template)
+- Semantic HTML + CSS custom properties for theming
+- Puppeteer (Chromium headless) for rendering
+- Runnable from fresh clone with documented dependencies
+- No hardcoded secrets — use `.env` + `.env.example`
 
 ## K. Confidentiality
 
-- Treat all Flock brand assets and reference material as proprietary
-- Do not share project content outside this repo or this conversation
-- Do not publish to public package registries without permission
-- The repo is private; keep it that way
+- Flock brand + reference material is proprietary
+- Repo stays private
+- Don't share content outside this repo / conversation
+- No public package publishing
 
-## L. When to push back
+## L. Mistakes
 
-If the user requests something that:
-- Conflicts with these rules
-- Violates the IP/copyright restriction (re-rendering copyrighted text verbatim)
-- Risks destructive data loss
-- Is architecturally inconsistent with prior decisions in DECISIONS.md
-
-…flag it briefly and propose an alternative. Don't silently comply.
-
-## M. Mistake handling
-
-If you (the AI) made an error in a prior turn:
-- Acknowledge it directly
-- Propose the fix
-- Add an entry to DECISIONS.md noting what went wrong and the correction
-- Don't apologize repeatedly — fix it and move on
+If you made an error in a prior turn: acknowledge, fix, log to DECISIONS.md, move on. Don't over-apologize.
 
 ---
 
-## Open question for the user (mark answered when decided)
+## Resolved policy (per Kim, 2026-05-13)
 
-- [ ] Should we add automated tests on PR (e.g., render-a-PDF check)? Probably yes once template exists.
-- [ ] Backup cadence — is git enough, or do we want periodic exports of context files?
-- [ ] Two-person review on visual changes before commit, or solo OK?
+- ✅ **Auto PR test (render a PDF on each PR):** Yes — add once template exists
+- ❌ **Backup beyond git:** No, git is enough
+- ✅ **Solo review on visual changes:** Yes, no two-person review needed
