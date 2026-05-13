@@ -1,4 +1,4 @@
-#,Page,Section,Field,Type,Mode,Airtable Table,Airtable Field,Input Prompt,Constraint,Example,Notes
+#,Page,Section,Field,Type,Mode,Airtable Table,Field Name,Input Prompt,Constraint,Example,Notes
 1,1,Header,Flock Safety logo,image,Locked,—,—,—,SVG / brand asset,Flock Safety wordmark,Locked — brand asset baked into template
 2,1,Headline,"Headline vertical phrase (""Flock Safety for [X]"")",text,Default,Verticals,headline_vertical,"Enter the vertical name as it should appear after ""Flock Safety for"". Title case.",≤ 24 chars,Transit Agencies,Drives both #2 and #30 (page 2 section header)
 3,1,Headline,Subheadline tagline,text,Default,Verticals,subheadline,3 short punchy phrases separated by periods. Sets the value proposition.,≤ 80 chars,Real Time Awareness. Rapid Response. Safer Transit.,Three-beat rhythm matches brand voice
