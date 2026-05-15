@@ -1,5 +1,5 @@
 # Flock Collateral — Claude Code Context
-_Last auto-refreshed: 2026-05-14. Do not edit manually._
+_Last auto-refreshed: 2026-05-15. Do not edit manually._
 
 ## What This Is
 Kim's pitch-card PDF generator for **Flock Safety** — a transit technology company.
