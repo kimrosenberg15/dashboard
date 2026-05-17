@@ -158,7 +158,7 @@ def main() -> int:
         html = template_src
         for key, val in values.items():
             if key and val is not None:
-                html = html.replace("{{" + key + "}}", val)
+                html = html.replace("{{" + key + "}}", str(val))
 
         # Also write Account Name_Long / Account Name aliases from PC_ columns
         alias_map = {
