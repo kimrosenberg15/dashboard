@@ -47,11 +47,13 @@ jobs:
           pip install playwright==1.47.0 google-api-python-client google-auth
           python -m playwright install --with-deps chromium
 
-      - name: Download brand assets from Drive (skipped if DRIVE_SA_JSON unset)
-        run: python markup/fetch_assets.py
-
+      # Order matters: per-account HTML must be written BEFORE fetch_assets so
+      # the asset fetcher sees the new image URLs and downloads them.
       - name: Generate per-account HTML from Joe's sheet (skipped if DRIVE_SA_JSON unset)
         run: python markup/generate_from_sheet.py
+
+      - name: Download brand assets from Drive (skipped if DRIVE_SA_JSON unset)
+        run: python markup/fetch_assets.py
 
       - name: Render PDFs
         run: python markup/render.py
