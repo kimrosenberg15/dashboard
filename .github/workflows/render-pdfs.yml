@@ -24,6 +24,7 @@ env:
   FLOCK_COLLATERAL_FOLDER_ID: ${{ secrets.FLOCK_COLLATERAL_FOLDER_ID }}
   RENDERED_PDFS_FOLDER_ID: ${{ secrets.RENDERED_PDFS_FOLDER_ID }}
   # Joe's Pitch Card Spec spreadsheet — account list tab, rows 3-7
+  # (Sheets API + sheet-share with the SA confirmed 2026-05-17)
   SHEETS_SPREADSHEET_ID: 1pH3FUc1PatPpgGBBXnyIsZH_UGwv6kdNQmXxdpJVO34
   SHEET_DATA_ROWS_START: "3"
   SHEET_DATA_ROWS_END: "7"
