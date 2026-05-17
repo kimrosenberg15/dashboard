@@ -29,19 +29,56 @@ def main() -> int:
         print("No PDFs to upload.")
         return 0
 
+    diag_lines: list[str] = []
+
+    def diag(msg: str) -> None:
+        print(msg)
+        diag_lines.append(msg)
+
+    def write_diag() -> None:
+        diag_path = PDFS_DIR / "_upload_diag.txt"
+        diag_path.write_text("\n".join(diag_lines) + "\n", encoding="utf-8")
+
     try:
         from google.oauth2 import service_account
         from googleapiclient.discovery import build
         from googleapiclient.http import MediaFileUpload
 
+        sa_info = json.loads(sa_json)
+        diag(f"SA email: {sa_info.get('client_email', '<missing>')}")
+        diag(f"SA project: {sa_info.get('project_id', '<missing>')}")
+        diag(f"Target folder ID: {folder_id}")
         creds = service_account.Credentials.from_service_account_info(
-            json.loads(sa_json),
+            sa_info,
             scopes=["https://www.googleapis.com/auth/drive"],
         )
         drive = build("drive", "v3", credentials=creds, cache_discovery=False)
     except Exception as exc:
-        print(f"::warning::Drive client init failed: {exc}", file=sys.stderr)
+        diag(f"::warning::Drive client init failed: {exc}")
         traceback.print_exc()
+        write_diag()
+        return 0
+
+    # Probe folder reachability + write capability before touching the PDFs.
+    try:
+        meta = drive.files().get(
+            fileId=folder_id,
+            fields="id, name, mimeType, capabilities(canEdit, canAddChildren)",
+            supportsAllDrives=True,
+        ).execute()
+        diag(f"Folder: {meta.get('name')!r}  type={meta.get('mimeType')}")
+        caps = meta.get("capabilities", {})
+        diag(f"  canEdit={caps.get('canEdit')}  canAddChildren={caps.get('canAddChildren')}")
+        if not caps.get("canAddChildren"):
+            diag(
+                "::warning::SA cannot add files to this folder. "
+                "Share 'Rendered PDFs' with the SA email above as Editor."
+            )
+    except Exception as exc:
+        diag(f"::warning::Could not read folder metadata: {exc}")
+        diag("  → Folder ID may be wrong, or SA has no access at all.")
+        traceback.print_exc()
+        write_diag()
         return 0
 
     def find_existing(name: str) -> str | None:
@@ -68,7 +105,7 @@ def main() -> int:
                     media_body=media,
                     supportsAllDrives=True,
                 ).execute()
-                print(f"  ↻ updated {pdf.name}")
+                diag(f"  ↻ updated {pdf.name}")
             else:
                 drive.files().create(
                     body={"name": pdf.name, "parents": [folder_id]},
@@ -76,21 +113,22 @@ def main() -> int:
                     fields="id",
                     supportsAllDrives=True,
                 ).execute()
-                print(f"  ↑ uploaded {pdf.name}")
+                diag(f"  ↑ uploaded {pdf.name}")
             ok += 1
         except Exception as exc:
-            print(f"::warning::Failed to upload {pdf.name}: {exc}", file=sys.stderr)
+            diag(f"::warning::Failed to upload {pdf.name}: {exc}")
             traceback.print_exc()
             failed += 1
 
-    print(f"\nDrive upload: {ok} ok, {failed} failed (of {len(pdfs)} PDF(s))")
+    diag(f"\nDrive upload: {ok} ok, {failed} failed (of {len(pdfs)} PDF(s))")
     if failed:
-        print(
+        diag(
             "  → Likely causes:\n"
             "    1) 'Rendered PDFs/' folder shared with SA as Viewer instead of Editor\n"
             "    2) RENDERED_PDFS_FOLDER_ID points at the wrong folder\n"
             "    3) Drive API not enabled in the SA project"
         )
+    write_diag()
     return 0
 
 

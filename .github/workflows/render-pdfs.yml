@@ -63,12 +63,19 @@ jobs:
           path: markup/rendered/*.pdf
           if-no-files-found: warn
 
+      # Run Drive upload BEFORE the branch commit so its diagnostic file
+      # (markup/rendered/_upload_diag.txt) lands in the same commit and can
+      # be read from the branch when CI logs aren't easily accessible.
+      - name: Upload PDFs to Drive Rendered PDFs/ folder (skipped if DRIVE_SA_JSON unset)
+        run: python markup/upload_to_drive.py
+
       - name: Commit rendered PDFs back to branch
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          # -A picks up both new/modified PDFs and deletions (orphans removed by
-          # render.py when their source HTML is gone).
+          # -A picks up new/modified PDFs, deletions (orphans removed by
+          # render.py when their source HTML is gone), and the upload
+          # diagnostic file written by upload_to_drive.py.
           git add -A markup/rendered/ 2>/dev/null || true
           if git diff --staged --quiet; then
             echo "No PDF changes to commit"
@@ -90,6 +97,3 @@ jobs:
             sleep 2
           done
           echo "::warning::Could not push rendered PDFs back to branch after 3 attempts. PDFs are still in the workflow artifact."
-
-      - name: Upload PDFs to Drive Rendered PDFs/ folder (skipped if DRIVE_SA_JSON unset)
-        run: python markup/upload_to_drive.py
