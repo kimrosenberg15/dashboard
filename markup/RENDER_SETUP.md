@@ -68,13 +68,32 @@ The service account is just an email address from Drive's perspective.
    - Secret: `1gAw6R_N6EW24Yd0t2U12sxI5ESXMbjSa`
    - **Add secret**.
 
-## Step 5 — Kick off the first render
+## Step 5 — Enable Sheets API + share Joe's spreadsheet
+
+This unlocks per-account HTML generation from Joe's data. The same service account is reused.
+
+1. Open <https://console.cloud.google.com/apis/library/sheets.googleapis.com>.
+2. Make sure the project from step 1 is selected. Click **Enable**.
+3. Open Joe's Pitch Card Spec spreadsheet:
+   <https://docs.google.com/spreadsheets/d/1pH3FUc1PatPpgGBBXnyIsZH_UGwv6kdNQmXxdpJVO34>
+4. Click **Share** (top-right).
+5. Paste the service-account email from step 1.6.
+6. Set permission to **Viewer**. Uncheck "Notify people". **Share**.
+
+Once done, CI will auto-generate `markup/account-<name>.html` for each row
+3–7 of the "account list" tab and render them alongside the master template.
+
+## Step 6 — Kick off the first render
 
 Either:
 
 - Push any change to a `markup/*.html` file, or
 - Open <https://github.com/kimrosenberg15/dashboard/actions/workflows/render-pdfs.yml>
   and click **Run workflow** → pick the branch → **Run workflow**.
+
+The workflow renders the master template **plus** one PDF per account row from
+Joe's sheet (once step 5 is done). PDFs land in `markup/rendered/` named
+`pitch-card-template.pdf`, `account-city-of-yonkers.pdf`, etc.
 
 Once it's green:
 
@@ -111,3 +130,5 @@ If the SA key leaks or you want to rotate it: in Cloud Console, **Manage keys**
 | `403: insufficientPermissions` on upload | `Rendered PDFs/` shared as Viewer not Editor | Step 3.5–6, change role to Editor. |
 | `Forbidden: Drive API has not been used` | API disabled in project | Step 2. |
 | Workflow doesn't trigger on push | The file you changed wasn't under `markup/*.html` | Touch any `.html` in markup/ and re-push, or click **Run workflow**. |
+| "Generate per-account" step skipped with `Could not read spreadsheet metadata` | Sheets API not enabled or spreadsheet not shared | Step 5. |
+| Account HTML generated but placeholders unfilled | Sheet column name doesn't match template `{{placeholder}}` | Check the column header in the "account list" tab matches the `PC_*` name in the spec. |

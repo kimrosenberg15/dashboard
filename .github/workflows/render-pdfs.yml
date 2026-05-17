@@ -8,6 +8,7 @@ on:
       - '.github/workflows/render-pdfs.yml'
       - 'markup/render.py'
       - 'markup/fetch_assets.py'
+      - 'markup/generate_from_sheet.py'
       - 'markup/upload_to_drive.py'
   workflow_dispatch:
 
@@ -22,6 +23,10 @@ env:
   DRIVE_SA_JSON: ${{ secrets.DRIVE_SA_JSON }}
   FLOCK_COLLATERAL_FOLDER_ID: ${{ secrets.FLOCK_COLLATERAL_FOLDER_ID }}
   RENDERED_PDFS_FOLDER_ID: ${{ secrets.RENDERED_PDFS_FOLDER_ID }}
+  # Joe's Pitch Card Spec spreadsheet — account list tab, rows 3-7
+  SHEETS_SPREADSHEET_ID: 1pH3FUc1PatPpgGBBXnyIsZH_UGwv6kdNQmXxdpJVO34
+  SHEET_DATA_ROWS_START: "3"
+  SHEET_DATA_ROWS_END: "7"
 
 jobs:
   render:
@@ -43,6 +48,9 @@ jobs:
 
       - name: Download brand assets from Drive (skipped if DRIVE_SA_JSON unset)
         run: python markup/fetch_assets.py
+
+      - name: Generate per-account HTML from Joe's sheet (skipped if DRIVE_SA_JSON unset)
+        run: python markup/generate_from_sheet.py
 
       - name: Render PDFs
         run: python markup/render.py
