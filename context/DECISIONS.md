@@ -1,5 +1,11 @@
 # Decisions Journal
 
+## 2026-05-17 — Joe's Google Sheet as near-term data source
+Joe's Pitch Card Spec spreadsheet (`1pH3FUc1PatPpgGBBXnyIsZH_UGwv6kdNQmXxdpJVO34`, "account list" tab, rows 3-7) is the data source until Airtable is built. CI reads it via Sheets API using the same service account as Drive. Column names in the sheet are the `PC_*` placeholder names — direct match, no mapping layer needed. Airtable replaces this later; the script is thin enough to discard.
+
+## 2026-05-17 — Render pipeline architecture locked
+Three-step CI pipeline: fetch_assets → generate_from_sheet → render. All steps are non-fatal if credentials are missing. The pipeline renders whatever HTML files exist in markup/ — master template always renders; per-account files render when the sheet step succeeds.
+
 Append-only log of choices made and their rationale. Newest at top.
 
 ---

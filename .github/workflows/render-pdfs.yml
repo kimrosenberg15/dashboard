@@ -1,0 +1,107 @@
+name: Render pitch-card PDFs
+
+on:
+  push:
+    branches: ['**']
+    paths:
+      - 'markup/*.html'
+      - '.github/workflows/render-pdfs.yml'
+      - 'markup/render.py'
+      - 'markup/fetch_assets.py'
+      - 'markup/generate_from_sheet.py'
+      - 'markup/upload_to_drive.py'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: render-pdfs-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  DRIVE_SA_JSON: ${{ secrets.DRIVE_SA_JSON }}
+  FLOCK_COLLATERAL_FOLDER_ID: ${{ secrets.FLOCK_COLLATERAL_FOLDER_ID }}
+  RENDERED_PDFS_FOLDER_ID: ${{ secrets.RENDERED_PDFS_FOLDER_ID }}
+  # OAuth user delegation for Drive upload (SAs can't write to personal Drive).
+  # All three must be set, or the upload step falls back to the SA (Shared
+  # Drives only). See markup/RENDER_SETUP.md for how to get a refresh token.
+  DRIVE_OAUTH_CLIENT_ID: ${{ secrets.DRIVE_OAUTH_CLIENT_ID }}
+  DRIVE_OAUTH_CLIENT_SECRET: ${{ secrets.DRIVE_OAUTH_CLIENT_SECRET }}
+  DRIVE_OAUTH_REFRESH_TOKEN: ${{ secrets.DRIVE_OAUTH_REFRESH_TOKEN }}
+  # Joe's Pitch Card Spec spreadsheet — account list tab, rows 3-7
+  # (Sheets API + sheet-share with the SA confirmed 2026-05-17)
+  SHEETS_SPREADSHEET_ID: 1pH3FUc1PatPpgGBBXnyIsZH_UGwv6kdNQmXxdpJVO34
+  SHEET_DATA_ROWS_START: "3"
+  SHEET_DATA_ROWS_END: "7"
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Playwright + Google API client
+        run: |
+          python -m pip install --upgrade pip
+          pip install playwright==1.47.0 google-api-python-client google-auth
+          python -m playwright install --with-deps chromium
+
+      # Order matters: per-account HTML must be written BEFORE fetch_assets so
+      # the asset fetcher sees the new image URLs and downloads them.
+      - name: Generate per-account HTML from Joe's sheet (skipped if DRIVE_SA_JSON unset)
+        run: python markup/generate_from_sheet.py
+
+      - name: Download brand assets from Drive (skipped if DRIVE_SA_JSON unset)
+        run: python markup/fetch_assets.py
+
+      - name: Render PDFs
+        run: python markup/render.py
+
+      - name: Upload PDFs as workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pitch-card-pdfs
+          path: markup/rendered/*.pdf
+          if-no-files-found: warn
+
+      # Run Drive upload BEFORE the branch commit so its diagnostic file
+      # (markup/rendered/_upload_diag.txt) lands in the same commit and can
+      # be read from the branch when CI logs aren't easily accessible.
+      - name: Upload PDFs to Drive Rendered PDFs/ folder (skipped if DRIVE_SA_JSON unset)
+        run: python markup/upload_to_drive.py
+
+      - name: Commit rendered PDFs back to branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          # -A picks up new/modified PDFs, deletions (orphans removed by
+          # render.py when their source HTML is gone), and the upload
+          # diagnostic file written by upload_to_drive.py.
+          git add -A markup/rendered/ 2>/dev/null || true
+          if git diff --staged --quiet; then
+            echo "No PDF changes to commit"
+            exit 0
+          fi
+          git commit -m "chore: render PDFs [skip ci]"
+          # The branch may have advanced while CI was running (e.g. a follow-up
+          # push during the workflow). Rebase onto remote before pushing, and
+          # retry once. Don't fail the job — the PDFs are already in the
+          # artifact, so this is a convenience for branch viewing only.
+          for attempt in 1 2 3; do
+            if git push; then
+              echo "Push succeeded on attempt $attempt"
+              exit 0
+            fi
+            echo "Push attempt $attempt failed; rebasing onto remote and retrying…"
+            git fetch origin "${GITHUB_REF_NAME}"
+            git rebase "origin/${GITHUB_REF_NAME}" || git rebase --abort
+            sleep 2
+          done
+          echo "::warning::Could not push rendered PDFs back to branch after 3 attempts. PDFs are still in the workflow artifact."
