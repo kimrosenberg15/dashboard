@@ -33,7 +33,11 @@ SPREADSHEET_ID = os.environ.get(
 ACCOUNT_LIST_GID = "922817776"
 
 # Row numbers are 1-based (Google Sheets convention).
-# Row 1 = header row. Row 2 = example/reference. Rows 3-7 = real accounts.
+# Joe's "account list" tab uses TWO header rows:
+#   Row 1 = friendly column names (SF Parent Account, Unique ID, …)
+#   Row 2 = the PC_* code names that match {{placeholders}} in the template
+#   Rows 3+ = actual account data
+SHEET_HEADER_ROW = int(os.environ.get("SHEET_HEADER_ROW", "2"))
 DATA_ROWS_START = int(os.environ.get("SHEET_DATA_ROWS_START", "3"))
 DATA_ROWS_END = int(os.environ.get("SHEET_DATA_ROWS_END", "7"))
 
@@ -114,12 +118,19 @@ def main() -> int:
         print(f"'{tab_name}' tab is empty.")
         return 0
 
-    headers = all_rows[0]
+    header_idx = SHEET_HEADER_ROW - 1
+    if header_idx >= len(all_rows):
+        print(
+            f"Header row {SHEET_HEADER_ROW} out of range "
+            f"(sheet has {len(all_rows)} rows). Aborting."
+        )
+        return 0
+    headers = all_rows[header_idx]
     print(f"Sheet '{tab_name}': {len(all_rows)} rows, {len(headers)} columns")
-    print(f"  Columns: {headers[:6]}{'…' if len(headers) > 6 else ''}")
+    pc_cols = [h for h in headers if h.startswith("PC_") or h.startswith("PC ")]
+    print(f"  PC_* header columns ({len(pc_cols)}): {pc_cols[:8]}{'…' if len(pc_cols) > 8 else ''}")
 
     # Convert 1-based row numbers to 0-based indices in all_rows.
-    # Row 1 (index 0) is headers; rows 3-7 are indices 2-6.
     start_idx = DATA_ROWS_START - 1
     end_idx = DATA_ROWS_END      # exclusive slice
     data_rows = all_rows[start_idx:end_idx]
@@ -135,6 +146,11 @@ def main() -> int:
         f"Generating HTML for {len(data_rows)} accounts "
         f"(sheet rows {DATA_ROWS_START}–{DATA_ROWS_END})…"
     )
+
+    # Clear any account-*.html from a previous run so renamed/removed accounts
+    # don't linger and get rendered to stale PDFs.
+    for stale in ROOT.glob("account-*.html"):
+        stale.unlink()
 
     template_src = TEMPLATE.read_text(encoding="utf-8")
     generated = 0

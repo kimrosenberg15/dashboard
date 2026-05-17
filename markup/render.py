@@ -122,6 +122,15 @@ def main() -> int:
         print("No HTML files found in markup/ — nothing to render.")
         return 0
 
+    # Drop stale PDFs whose source HTML no longer exists (e.g. an account
+    # that was removed from Joe's sheet, or row-N.pdf orphans from before
+    # the header-row fix).
+    expected_stems = {f.stem for f in files}
+    for pdf in OUT_DIR.glob("*.pdf"):
+        if pdf.stem not in expected_stems:
+            print(f"  ⌫ removing stale {pdf.name}")
+            pdf.unlink()
+
     staging = ROOT / "_staging"
     if staging.exists():
         shutil.rmtree(staging)
