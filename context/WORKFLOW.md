@@ -192,3 +192,68 @@ Each one is the same four pillars with different inputs and a different template
 > Inputs are structured. Templates are unbreakable. Send is automated. Delivery is coordinated. Every action in the pipeline is leverage, not labor.
 
 Every feature either reinforces that or it doesn't ship.
+
+---
+
+## 10. Agent roster
+
+The pipeline is the architecture. **Agents are the workers** that do the heavy craft work inside it. Each agent is a specialized AI assistant with a narrow job, a defined set of tools, and a clear "done" criterion. Agents are swappable — improve one without touching the others.
+
+### QA agents (run before Ship)
+
+| Agent | Job | Reads | Writes |
+|---|---|---|---|
+| **Grammar / copy QA** | Proof every per-piece text cell. Catch typos, punctuation, voice drift. Suggest concise rewrites where wordy. | Account row text fields, brand voice notes | A "suggested edits" column per row; flags blockers |
+| **Brand / font QA** | Verify rendered output uses correct colors, font weights, lockups. Catch substitution issues, brand drift on edited templates. | Rendered PDF, brand guidelines | Pass/fail + annotated diff for any deviation |
+| **Image QA** | Source new images, size them, save with the right filename, ensure visual quality (crop, contrast, subject prominence). Flag low-res or off-brand assets. | Account row image refs, Drive asset folders | New/replacement images in Drive, sizing report |
+| **Sizing / spacing QA** | Look at rendered output for layout problems a human would notice: clipped text, awkward line breaks, alignment drift, empty cells. | Rendered PDF + the source HTML | Visual issues list, suggested CSS or content fixes |
+
+### Content agents (run during Render)
+
+| Agent | Job |
+|---|---|
+| **Research agent** | Given an account name + city, pull local news, recent council votes, crime stats, leadership changes. Write structured columns on the Account row. |
+| **Drafter agent** | Given an account row + research columns, draft the per-piece text (intro paragraph, regional stat, CTA reference) using the Vertical Library as a baseline. |
+| **Email drafter agent** | Given the same row, write the personalized opening line and full outreach email. |
+| **Validator agent** | Read each row, flag problems in plain English ("intro is 340 chars, cap is 280, here's a 270-char trim"). |
+
+### Operations agents (run during Ship)
+
+| Agent | Job |
+|---|---|
+| **Vendor coordination agent** | Build the daily print + swag manifest, push to vendors, watch for delivery confirmations, flag exceptions. |
+
+### Design agent (separate workflow, on demand)
+
+A creative collaborator, not part of the production line.
+
+- Helps draft new collateral templates (recap PDFs, microsites, mailers, internal decks).
+- Helps improve existing templates (proposes layout refinements, tests them against the sample-set torture test, never breaks brand).
+- Reads the brand system, existing templates, and brand voice. Outputs new HTML/CSS templates ready to plug into the pipeline.
+- Triggered by us, not by data events.
+
+---
+
+## 11. Agent setup — high level
+
+Each agent is a few hundred lines of config, not a multi-week build. The pattern is the same every time:
+
+1. **Define the job** — one sentence: "Proof every per-piece text cell for grammar and Flock voice." If it takes more than a sentence, split it into two agents.
+2. **Pick the tools it can use** — read this Airtable view, write to this column, look at this image, render a sample PDF. Tools are narrow on purpose; the agent can't reach outside its lane.
+3. **Set the trigger** — runs on a schedule (daily), on an event (new row added), or on demand (when we approve a batch).
+4. **Define "done"** — what status it sets when finished, what it does when it can't decide (flag for human review, never silently fail).
+5. **Run on a small sample first** — 20 rows. Read the output. Tune the instructions. Then scale.
+6. **Add it to the pipeline** — slot it into Validate, Render, or Ship. The pipeline doesn't change; we just hand more work to the agent layer.
+
+**Stack:** Agents run on the **Claude Agent SDK** (the same engine powering this conversation). Each agent lives as a small repo file describing its job, tools, and triggers. Pipeline events fire agents; agents write back to Airtable and Drive. No new infrastructure — same GitHub Actions runner, same Airtable, same Drive.
+
+**Order of operations:**
+
+- **First agent to build: Validator.** Highest leverage, lowest risk. Saves hours of cleanup on every batch.
+- **Then Image QA.** Unlocks the 2000-account run by industrializing asset prep.
+- **Then Drafter + Email Drafter.** Now the system writes for us, we edit.
+- **Then Grammar QA + Brand QA.** Catches what humans miss when reviewing 2000 outputs.
+- **Then Design agent.** Once we're shipping outbound, expand to new collateral types.
+- **Then Research + Vendor Coordination.** Last because they touch external systems and need stable upstream first.
+
+Each agent ships when it can run unattended on a sample-set torture test without producing garbage. None of them require ripping anything up to add the next one.
