@@ -1,5 +1,18 @@
 """Upload markup/rendered/*.pdf to the Drive 'Rendered PDFs' folder.
 
+Two auth modes, picked at runtime:
+
+  • OAuth user delegation (preferred) — uses
+      DRIVE_OAUTH_CLIENT_ID
+      DRIVE_OAUTH_CLIENT_SECRET
+      DRIVE_OAUTH_REFRESH_TOKEN
+    All three must be set. Uploads as Kim's user account, which works for
+    personal Drive folders (the service-account path does not, because
+    service accounts have no personal storage quota).
+
+  • Service account (fallback) — uses DRIVE_SA_JSON. Only works if the
+    target folder lives inside a Shared Drive.
+
 Non-fatal: per-file upload errors are logged as workflow warnings; the
 script always returns 0 so a Drive misconfiguration doesn't fail the
 whole CI run. The rendered PDFs are already in the workflow artifact
@@ -18,10 +31,21 @@ PDFS_DIR = ROOT / "rendered"
 
 
 def main() -> int:
-    sa_json = os.environ.get("DRIVE_SA_JSON", "").strip()
     folder_id = os.environ.get("RENDERED_PDFS_FOLDER_ID", "").strip()
-    if not sa_json or not folder_id:
-        print("DRIVE_SA_JSON or RENDERED_PDFS_FOLDER_ID not set — skipping Drive upload.")
+    if not folder_id:
+        print("RENDERED_PDFS_FOLDER_ID not set — skipping Drive upload.")
+        return 0
+
+    oauth_client_id = os.environ.get("DRIVE_OAUTH_CLIENT_ID", "").strip()
+    oauth_client_secret = os.environ.get("DRIVE_OAUTH_CLIENT_SECRET", "").strip()
+    oauth_refresh_token = os.environ.get("DRIVE_OAUTH_REFRESH_TOKEN", "").strip()
+    sa_json = os.environ.get("DRIVE_SA_JSON", "").strip()
+
+    have_oauth = bool(oauth_client_id and oauth_client_secret and oauth_refresh_token)
+    have_sa = bool(sa_json)
+
+    if not have_oauth and not have_sa:
+        print("No DRIVE_OAUTH_* or DRIVE_SA_JSON env vars — skipping Drive upload.")
         return 0
 
     pdfs = sorted(PDFS_DIR.glob("*.pdf"))
@@ -36,22 +60,36 @@ def main() -> int:
         diag_lines.append(msg)
 
     def write_diag() -> None:
-        diag_path = PDFS_DIR / "_upload_diag.txt"
-        diag_path.write_text("\n".join(diag_lines) + "\n", encoding="utf-8")
+        (PDFS_DIR / "_upload_diag.txt").write_text(
+            "\n".join(diag_lines) + "\n", encoding="utf-8"
+        )
 
     try:
-        from google.oauth2 import service_account
         from googleapiclient.discovery import build
         from googleapiclient.http import MediaFileUpload
 
-        sa_info = json.loads(sa_json)
-        diag(f"SA email: {sa_info.get('client_email', '<missing>')}")
-        diag(f"SA project: {sa_info.get('project_id', '<missing>')}")
+        if have_oauth:
+            from google.oauth2.credentials import Credentials
+            creds = Credentials(
+                token=None,
+                refresh_token=oauth_refresh_token,
+                token_uri="https://oauth2.googleapis.com/token",
+                client_id=oauth_client_id,
+                client_secret=oauth_client_secret,
+                scopes=["https://www.googleapis.com/auth/drive"],
+            )
+            diag("Auth mode: OAuth user delegation (refresh token)")
+        else:
+            from google.oauth2 import service_account
+            sa_info = json.loads(sa_json)
+            diag(f"Auth mode: Service account ({sa_info.get('client_email', '<missing>')})")
+            diag("  NOTE: SAs cannot create files in personal Drive — only Shared Drives.")
+            creds = service_account.Credentials.from_service_account_info(
+                sa_info,
+                scopes=["https://www.googleapis.com/auth/drive"],
+            )
+
         diag(f"Target folder ID: {folder_id}")
-        creds = service_account.Credentials.from_service_account_info(
-            sa_info,
-            scopes=["https://www.googleapis.com/auth/drive"],
-        )
         drive = build("drive", "v3", credentials=creds, cache_discovery=False)
     except Exception as exc:
         diag(f"::warning::Drive client init failed: {exc}")
@@ -70,13 +108,9 @@ def main() -> int:
         caps = meta.get("capabilities", {})
         diag(f"  canEdit={caps.get('canEdit')}  canAddChildren={caps.get('canAddChildren')}")
         if not caps.get("canAddChildren"):
-            diag(
-                "::warning::SA cannot add files to this folder. "
-                "Share 'Rendered PDFs' with the SA email above as Editor."
-            )
+            diag("::warning::Auth principal cannot add files to this folder.")
     except Exception as exc:
         diag(f"::warning::Could not read folder metadata: {exc}")
-        diag("  → Folder ID may be wrong, or SA has no access at all.")
         traceback.print_exc()
         write_diag()
         return 0
@@ -121,12 +155,11 @@ def main() -> int:
             failed += 1
 
     diag(f"\nDrive upload: {ok} ok, {failed} failed (of {len(pdfs)} PDF(s))")
-    if failed:
+    if failed and have_sa and not have_oauth:
         diag(
-            "  → Likely causes:\n"
-            "    1) 'Rendered PDFs/' folder shared with SA as Viewer instead of Editor\n"
-            "    2) RENDERED_PDFS_FOLDER_ID points at the wrong folder\n"
-            "    3) Drive API not enabled in the SA project"
+            "  → SA mode hit 'storage quota' because the folder is in personal\n"
+            "    Drive. Switch to OAuth (DRIVE_OAUTH_* secrets) or move the folder\n"
+            "    into a Shared Drive."
         )
     write_diag()
     return 0
