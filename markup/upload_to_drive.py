@@ -1,13 +1,16 @@
 """Upload markup/rendered/*.pdf to the Drive 'Rendered PDFs' folder.
 
-No-op if DRIVE_SA_JSON or RENDERED_PDFS_FOLDER_ID is unset, so the workflow
-can run before Kim sets the secret.
+Non-fatal: per-file upload errors are logged as workflow warnings; the
+script always returns 0 so a Drive misconfiguration doesn't fail the
+whole CI run. The rendered PDFs are already in the workflow artifact
+and committed back to the branch by an earlier step.
 """
 from __future__ import annotations
 
 import json
 import os
 import sys
+import traceback
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
@@ -26,15 +29,20 @@ def main() -> int:
         print("No PDFs to upload.")
         return 0
 
-    from google.oauth2 import service_account
-    from googleapiclient.discovery import build
-    from googleapiclient.http import MediaFileUpload
+    try:
+        from google.oauth2 import service_account
+        from googleapiclient.discovery import build
+        from googleapiclient.http import MediaFileUpload
 
-    creds = service_account.Credentials.from_service_account_info(
-        json.loads(sa_json),
-        scopes=["https://www.googleapis.com/auth/drive"],
-    )
-    drive = build("drive", "v3", credentials=creds, cache_discovery=False)
+        creds = service_account.Credentials.from_service_account_info(
+            json.loads(sa_json),
+            scopes=["https://www.googleapis.com/auth/drive"],
+        )
+        drive = build("drive", "v3", credentials=creds, cache_discovery=False)
+    except Exception as exc:
+        print(f"::warning::Drive client init failed: {exc}", file=sys.stderr)
+        traceback.print_exc()
+        return 0
 
     def find_existing(name: str) -> str | None:
         safe = name.replace("'", "\\'")
@@ -48,25 +56,41 @@ def main() -> int:
         files = resp.get("files", [])
         return files[0]["id"] if files else None
 
+    ok = 0
+    failed = 0
     for pdf in pdfs:
-        media = MediaFileUpload(str(pdf), mimetype="application/pdf", resumable=False)
-        existing = find_existing(pdf.name)
-        if existing:
-            drive.files().update(
-                fileId=existing,
-                media_body=media,
-                supportsAllDrives=True,
-            ).execute()
-            print(f"  ↻ updated {pdf.name}")
-        else:
-            drive.files().create(
-                body={"name": pdf.name, "parents": [folder_id]},
-                media_body=media,
-                fields="id",
-                supportsAllDrives=True,
-            ).execute()
-            print(f"  ↑ uploaded {pdf.name}")
+        try:
+            media = MediaFileUpload(str(pdf), mimetype="application/pdf", resumable=False)
+            existing = find_existing(pdf.name)
+            if existing:
+                drive.files().update(
+                    fileId=existing,
+                    media_body=media,
+                    supportsAllDrives=True,
+                ).execute()
+                print(f"  ↻ updated {pdf.name}")
+            else:
+                drive.files().create(
+                    body={"name": pdf.name, "parents": [folder_id]},
+                    media_body=media,
+                    fields="id",
+                    supportsAllDrives=True,
+                ).execute()
+                print(f"  ↑ uploaded {pdf.name}")
+            ok += 1
+        except Exception as exc:
+            print(f"::warning::Failed to upload {pdf.name}: {exc}", file=sys.stderr)
+            traceback.print_exc()
+            failed += 1
 
+    print(f"\nDrive upload: {ok} ok, {failed} failed (of {len(pdfs)} PDF(s))")
+    if failed:
+        print(
+            "  → Likely causes:\n"
+            "    1) 'Rendered PDFs/' folder shared with SA as Viewer instead of Editor\n"
+            "    2) RENDERED_PDFS_FOLDER_ID points at the wrong folder\n"
+            "    3) Drive API not enabled in the SA project"
+        )
     return 0
 
 
