@@ -47,13 +47,17 @@ GOOGLE_FONTS_CSS = """
 """
 
 
-def rewrite_asset_paths(html: str, staging: Path) -> str:
+def rewrite_asset_paths(html: str, staging: Path) -> tuple[str, dict]:
     """Rewrite Mac CloudStorage file:/// URLs to repo-side file:/// URLs.
 
     For each absolute Mac path, decode the relative part, look for it under
     markup/assets/, and if present, rewrite to that local file:// URL.
     If absent, leave the original path (will 404 silently).
+
+    Returns the rewritten HTML and a stats dict so we can see in CI logs
+    which assets resolved and which didn't.
     """
+    stats = {"rewritten": [], "missing": []}
 
     def _replace(match: re.Match) -> str:
         full = match.group(0)
@@ -65,8 +69,9 @@ def rewrite_asset_paths(html: str, staging: Path) -> str:
             staged.parent.mkdir(parents=True, exist_ok=True)
             if not staged.exists():
                 shutil.copy2(local, staged)
-            # Relative to the HTML file in staging/
+            stats["rewritten"].append(rel)
             return "assets/" + urllib.parse.quote(rel)
+        stats["missing"].append(rel)
         return full
 
     pattern = re.compile(re.escape(MAC_BASE) + r"[^'\"\s)]+")
@@ -75,7 +80,7 @@ def rewrite_asset_paths(html: str, staging: Path) -> str:
     # Inject the Google Fonts fallback right before </head>
     if "</head>" in out and "render-fonts-fallback" not in out:
         out = out.replace("</head>", GOOGLE_FONTS_CSS + "</head>", 1)
-    return out
+    return out, stats
 
 
 def html_files() -> list[Path]:
@@ -85,9 +90,17 @@ def html_files() -> list[Path]:
 
 def render_one(page, html_path: Path, staging: Path) -> Path:
     src = html_path.read_text(encoding="utf-8")
-    rewritten = rewrite_asset_paths(src, staging)
+    rewritten, stats = rewrite_asset_paths(src, staging)
     staged_html = staging / html_path.name
     staged_html.write_text(rewritten, encoding="utf-8")
+
+    unique_missing = sorted(set(stats["missing"]))
+    print(f"    {len(set(stats['rewritten']))} unique assets resolved, "
+          f"{len(unique_missing)} missing")
+    for m in unique_missing[:10]:
+        print(f"      - missing: {m}")
+    if len(unique_missing) > 10:
+        print(f"      ... and {len(unique_missing) - 10} more")
 
     out_pdf = OUT_DIR / f"{html_path.stem}.pdf"
     page.goto(staged_html.as_uri(), wait_until="networkidle")
