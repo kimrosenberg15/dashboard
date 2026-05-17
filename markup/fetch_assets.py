@@ -23,17 +23,30 @@ ROOT = Path(__file__).resolve().parent
 ASSETS_DIR = ROOT / "assets"
 
 # Top-level subfolders we want to mirror. Keep this list small — pitch cards
-# only reference these directories.
+# only reference these directories. Folder names must match Drive exactly
+# (see context/BRAND_ASSETS.md for the canonical SSOT).
 WANTED_SUBFOLDERS = [
-    "BRAND_Logos",
+    "BRAND_Flock Logo",
     "BRAND_Images",
-    "Account Logos",
+    "BRAND_Font - Denton OTF",
+    "BRAND_Font - Sohne OTF",
     "Images_Fixed",
+    "Images_Account Logos",
+    "Images_Account_QR Codes",
+    "Images_Account_Location",
+    "Images_Account_Agency Type",
+    "Images_Products",
     "LPR & ALPR",
     "Video Cameras",
     "Audio Detection",
-    "BRAND_Font - Denton OTF",
-    "BRAND_Font - Sohne OTF",
+    "DFR - Drone as First Responder",
+    "Mobile Security Trailers",
+    "Nova OSINT",
+    "FlockOS & Platform",
+    "Traffic Analytics & Transportation",
+    "Community & Advocacy",
+    "Industry Verticals",
+    "Legal & Compliance",
 ]
 
 

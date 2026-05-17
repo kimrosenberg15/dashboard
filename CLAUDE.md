@@ -16,7 +16,9 @@ Builds dynamic, data-driven 3-page PDF pitch cards for transit agencies and othe
 2. Read `memory/MEMORY.md` — full index, quick-start, session protocol
 3. Read `memory/project.md`, `memory/preferences.md`, `memory/profile.md`
 4. Read `context/DECISIONS.md` to see what has been decided
-5. Read `markup/field_specs.csv` if the session involves fields
+5. Read `context/WORKFLOW.md` — full outbound system architecture (SSOT for the pipeline)
+6. Read `context/BRAND_ASSETS.md` — SSOT for brand assets, Drive folder IDs, logo usage. **Update in the same commit whenever touching a brand asset.**
+7. Read `markup/field_specs.csv` if the session involves fields
 
 ## Key Architecture
 - **3-page pitch card:** Page 1 (headline/brand panel), Page 2 (products grid), Page 3 (feature table + CTA)

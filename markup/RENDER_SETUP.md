@@ -14,8 +14,8 @@ incrementally.
 | GitHub secret | Where it comes from | Required? |
 |---|---|---|
 | `DRIVE_SA_JSON` | Google Cloud service account JSON key | Yes (for images + Drive upload) |
-| `FLOCK_COLLATERAL_FOLDER_ID` | `1gAw6R_N6EW24Yd0t2U12sxI5ESXMbjSa` | Yes (already known) |
-| `RENDERED_PDFS_FOLDER_ID` | Drive folder ID of `Rendered PDFs/` | Yes (find via Drive URL) |
+| `FLOCK_COLLATERAL_FOLDER_ID` | `1QwRN0wAFYB9QUETttAOT5LTj6D1hCXWW` (Flock Collateral root) | Yes |
+| `RENDERED_PDFS_FOLDER_ID` | `1gAw6R_N6EW24Yd0t2U12sxI5ESXMbjSa` (Rendered PDFs subfolder) | Yes |
 
 ## Step 1 — Create the Google Cloud service account
 
@@ -40,8 +40,8 @@ incrementally.
 
 The service account is just an email address from Drive's perspective.
 
-1. Open <https://drive.google.com/drive/u/0/folders/1gAw6R_N6EW24Yd0t2U12sxI5ESXMbjSa>
-   — this is the `Flock Collateral` folder.
+1. Open <https://drive.google.com/drive/u/0/folders/1QwRN0wAFYB9QUETttAOT5LTj6D1hCXWW>
+   — this is the `Flock Collateral` root folder.
 2. Right-click the folder → **Share**.
 3. Paste the service-account email from step 1.6.
 4. Set permission to **Viewer**. Uncheck "Notify people". **Share**.
@@ -61,11 +61,11 @@ The service account is just an email address from Drive's perspective.
    - **Add secret**.
 3. **New repository secret**:
    - Name: `FLOCK_COLLATERAL_FOLDER_ID`
-   - Secret: `1gAw6R_N6EW24Yd0t2U12sxI5ESXMbjSa`
+   - Secret: `1QwRN0wAFYB9QUETttAOT5LTj6D1hCXWW`
    - **Add secret**.
 4. **New repository secret**:
    - Name: `RENDERED_PDFS_FOLDER_ID`
-   - Secret: the folder ID from step 3.7.
+   - Secret: `1gAw6R_N6EW24Yd0t2U12sxI5ESXMbjSa`
    - **Add secret**.
 
 ## Step 5 — Kick off the first render
