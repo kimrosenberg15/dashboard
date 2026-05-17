@@ -1,5 +1,5 @@
-SA email: flock-pdf-renderer@flock-dashboard-sync.iam.gserviceaccount.com
-SA project: flock-dashboard-sync
+Auth mode: Service account (flock-pdf-renderer@flock-dashboard-sync.iam.gserviceaccount.com)
+  NOTE: SAs cannot create files in personal Drive — only Shared Drives.
 Target folder ID: 1gAw6R_N6EW24Yd0t2U12sxI5ESXMbjSa
 Folder: 'Rendered PDFs'  type=application/vnd.google-apps.folder
   canEdit=True  canAddChildren=True
@@ -11,7 +11,6 @@ Folder: 'Rendered PDFs'  type=application/vnd.google-apps.folder
 ::warning::Failed to upload pitch-card-template.pdf: <HttpError 403 when requesting https://www.googleapis.com/upload/drive/v3/files?fields=id&supportsAllDrives=true&alt=json&uploadType=multipart returned "Service Accounts do not have storage quota. Leverage shared drives (https://developers.google.com/workspace/drive/api/guides/about-shareddrives), or use OAuth delegation (http://support.google.com/a/answer/7281227) instead.". Details: "[{'message': 'Service Accounts do not have storage quota. Leverage shared drives (https://developers.google.com/workspace/drive/api/guides/about-shareddrives), or use OAuth delegation (http://support.google.com/a/answer/7281227) instead.', 'domain': 'usageLimits', 'reason': 'storageQuotaExceeded'}]">
 
 Drive upload: 0 ok, 6 failed (of 6 PDF(s))
-  → Likely causes:
-    1) 'Rendered PDFs/' folder shared with SA as Viewer instead of Editor
-    2) RENDERED_PDFS_FOLDER_ID points at the wrong folder
-    3) Drive API not enabled in the SA project
+  → SA mode hit 'storage quota' because the folder is in personal
+    Drive. Switch to OAuth (DRIVE_OAUTH_* secrets) or move the folder
+    into a Shared Drive.
